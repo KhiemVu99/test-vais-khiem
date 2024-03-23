@@ -1,0 +1,7 @@
+enum StatusFilter {
+  ALL,
+  COMPLETED,
+  UNCOMPLETED,
+  IN_PROGRESS,
+  EXPIRED,
+}
