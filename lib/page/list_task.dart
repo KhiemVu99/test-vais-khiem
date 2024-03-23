@@ -20,10 +20,12 @@ class ListTask extends StatefulWidget {
 class _ListTaskState extends State<ListTask> {
   int _currentDeadlineMillis = 0;
   late ThemeBloc themeBloc;
-  late final TextEditingController _textEditingController = TextEditingController(text: '');
+  late final TextEditingController _textEditingController =
+      TextEditingController(text: '');
   List<Task> _taskList = [];
   List<Task> _filterTaskList = [];
   late StatusFilter filterStatus = StatusFilter.ALL;
+
   @override
   void initState() {
     themeBloc = context.read<ThemeBloc>();
@@ -103,7 +105,8 @@ class _ListTaskState extends State<ListTask> {
           .toList();
       _taskList = _taskList
           .map(
-            (element) => element != task ? element.copyWith(isPinned: false) : newTask,
+            (element) =>
+                element != task ? element.copyWith(isPinned: false) : newTask,
           )
           .toList();
       if (!task.isPinned) {
@@ -112,7 +115,8 @@ class _ListTaskState extends State<ListTask> {
       } else {
         _filterTaskList.removeAt(0);
         _filterTaskList.add(newTask);
-        _filterTaskList.sort((task1, task2) => task1.createdAt.compareTo(task2.createdAt));
+        _filterTaskList
+            .sort((task1, task2) => task1.createdAt.compareTo(task2.createdAt));
       }
       _saveTaskList();
     });
@@ -150,7 +154,8 @@ class _ListTaskState extends State<ListTask> {
         _taskList = value;
         _filterTaskList.addAll(_taskList);
         try {
-          final taskPinned = _taskList.firstWhere((element) => element.isPinned);
+          final taskPinned =
+              _taskList.firstWhere((element) => element.isPinned);
           _filterTaskList.remove(taskPinned);
           _filterTaskList.insert(0, taskPinned);
         } on StateError {}
@@ -237,10 +242,12 @@ class _ListTaskState extends State<ListTask> {
                             _handleAddTask();
                           },
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppDimens.radiusOfButton),
+                            borderRadius:
+                                BorderRadius.circular(AppDimens.radiusOfButton),
                           ),
                           elevation: 1,
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           child: const Icon(Icons.add_rounded),
                         ),
                       ],
@@ -256,21 +263,25 @@ class _ListTaskState extends State<ListTask> {
                             TimeOfDay? selecterTime = await _pickTime();
                             setState(() {
                               if (selecterTime != null) {
-                                _currentDeadlineMillis = selectedDate.millisecondsSinceEpoch +
-                                    selecterTime.hour * 60 * 60 * 1000 +
-                                    selecterTime.minute * 60 * 1000;
+                                _currentDeadlineMillis =
+                                    selectedDate.millisecondsSinceEpoch +
+                                        selecterTime.hour * 60 * 60 * 1000 +
+                                        selecterTime.minute * 60 * 1000;
                               } else {
-                                _currentDeadlineMillis = selectedDate.millisecondsSinceEpoch;
+                                _currentDeadlineMillis =
+                                    selectedDate.millisecondsSinceEpoch;
                               }
                             });
                           },
                           child: Container(
                             decoration: BoxDecoration(
                                 color: context.colorScheme.onPrimary,
-                                borderRadius: BorderRadius.circular(AppDimens.radiusOfButton),
+                                borderRadius: BorderRadius.circular(
+                                    AppDimens.radiusOfButton),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: context.colorScheme.shadow.withOpacity(0.1),
+                                    color: context.colorScheme.shadow
+                                        .withOpacity(0.1),
                                     blurRadius: 1,
                                     spreadRadius: 1,
                                     offset: const Offset(2, 2),
@@ -284,7 +295,8 @@ class _ListTaskState extends State<ListTask> {
                               child: Text(
                                 _currentDeadlineMillis == 0
                                     ? "Choose deadline"
-                                    : _currentDeadlineMillis.toDateTime.convertToFormatDate(),
+                                    : _currentDeadlineMillis.toDateTime
+                                        .convertToFormatDate(),
                                 style: context.textTheme.bodyLarge?.copyWith(
                                   color: context.colorScheme.primary,
                                   fontWeight: FontWeight.w500,
@@ -296,24 +308,31 @@ class _ListTaskState extends State<ListTask> {
                       ],
                     ),
                     const SizedBox(height: AppSpacing.sp12),
-                    DropdownButton(
-                      isDense: true,
-                      alignment: Alignment.centerLeft,
-                      value: filterStatus,
-                      underline: const SizedBox(),
-                      items: StatusFilter.values
-                          .map(
-                            (e) => DropdownMenuItem(
-                              alignment: Alignment.centerLeft,
-                              value: e,
-                              child: Text(e.toText()),
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        _filterCurrentTaskList(value);
-                      },
-                    )
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: AppSpacing.sp16,
+                        left: AppSpacing.sp12,
+                        right: AppSpacing.sp12,
+                      ),
+                      child: DropdownButton(
+                        isDense: true,
+                        alignment: Alignment.centerLeft,
+                        value: filterStatus,
+                        underline: const SizedBox(),
+                        items: StatusFilter.values
+                            .map(
+                              (e) => DropdownMenuItem(
+                            alignment: Alignment.centerLeft,
+                            value: e,
+                            child: Text(e.toText()),
+                          ),
+                        )
+                            .toList(),
+                        onChanged: (value) {
+                          _filterCurrentTaskList(value);
+                        },
+                      )
+                    ),
                   ],
                 ),
               ),
@@ -340,8 +359,13 @@ class DisplayTasks extends StatelessWidget {
   final Function(Task) onRemovedTask;
   final Function(Task, Status) onChangeStatus;
   final Function(Task) onChangePin;
+
   const DisplayTasks(
-      {super.key, required this.taskList, required this.onRemovedTask, required this.onChangeStatus, required this.onChangePin});
+      {super.key,
+      required this.taskList,
+      required this.onRemovedTask,
+      required this.onChangeStatus,
+      required this.onChangePin});
 
   @override
   Widget build(BuildContext context) {
@@ -402,7 +426,8 @@ class DisplayTasks extends StatelessWidget {
                     children: [
                       if (remainDay < 1 && item.deadline != 0) ...[
                         const SizedBox(width: AppSpacing.sp8),
-                        const Icon(Icons.warning_amber_rounded, color: Colors.amberAccent),
+                        const Icon(Icons.warning_amber_rounded,
+                            color: Colors.amber),
                         const SizedBox(width: AppSpacing.sp8),
                       ],
                       InkWell(
@@ -453,7 +478,10 @@ class DisplayTasks extends StatelessWidget {
                           (e) => DropdownMenuItem(
                             alignment: Alignment.centerLeft,
                             value: e,
-                            child: Text(e.toText()),
+                            child: Text(
+                              e.toText(),
+                              style: context.textTheme.labelSmall?.copyWith(),
+                            ),
                           ),
                         )
                         .toList(),
@@ -488,8 +516,9 @@ class EmptyTasks extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: [
           Image.asset(
-            'assets/empty_task_image.png', // Replace with the path to your empty state image
-            width: context.widthScreen / 2,
+            'assets/empty_task_image.png',
+            // Replace with the path to your empty state image
+            width: context.widthScreen / 2.3,
             fit: BoxFit.cover,
           ),
           const SizedBox(height: AppSpacing.sp8),
